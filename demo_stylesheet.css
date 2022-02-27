@@ -1,0 +1,62 @@
+/* will smylie website css */
+body {
+  padding-left: 10%;
+  padding-right: 10%;
+  padding-top: 5%;
+  background-color: #202024;
+  color: #c7c7c7;
+  font-family: Lato, Helvetica, sans-serif;
+  /*max-width: 1000px;*/
+}
+a:link {
+  color: #62C4B5;
+}
+a:visited {
+  color: #A36BC6;
+}
+a:hover {
+  color: #00c4c4;
+}
+h1 {
+  text-align: center;
+}
+h2 {
+  color: #F8C626;
+  padding: 20px;
+  background-color: #2D2D33;
+  max-width: max-content;
+  border: 1px solid #F8C626;
+}
+img {
+  float: right;
+  border: 1px solid #F8C626;
+}
+abbr {
+  color:#F8C626;
+}
+table {
+  background-color: #2D2D33;
+  padding: 10px;
+}
+#header {
+  background-color: #2D2D33;
+  border: 1px solid #E61D77;
+  padding: 5px;
+}
+#footer {
+  background-color: #2D2D33;
+  border: 1px solid #E61D77;
+  padding: 10px;
+  font-style: italic;
+  font-size: 80%;
+  max-width: 100%;
+}
+.fancy {
+  font-weight: bold;
+  color: #E61D77;
+}
+.horiz-line {
+  background-color: #F8C626;
+  height: 1px;
+  max-width: 100%;
+}
