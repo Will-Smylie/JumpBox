@@ -9,6 +9,7 @@ var space_btwn_beats = 150*60; // units: Pix*velocity factor
 var hero_move = (space_btwn_beats/(fps/(bpm/60))); // PXmove/beat*beat/frame
 var beat_counter = 0; // to count beats / timing
 var player_last_x = 0; //used for tuning hero_move
+var player_max_y = 600; //used for testing jump heights for level design
 
 // demogame.state1 = function(){};
 // demogame.state1.prototype = {
@@ -81,15 +82,17 @@ var SceneOne = new Phaser.Class({
     player.setVelocityX(hero_move);
     player.anims.play('right', true);
     
-    if (cursors.up.isDown && player.body.touching.down) // short hop
+    if (cursors.up.isDown && player.body.touching.down) // short hop, results in 288.5-261.611111111111
     {
       player.anims.play('turn', true);
       player.setVelocityY(-150);
+      console.log(`jumpStart:${player.x}`); //DEV // 4550 >  4665
     }
-    else if (cursors.space.isDown && player.body.touching.down) // tall hop
+    else if (cursors.space.isDown && player.body.touching.down) // tall hop, results in 288.5-212.44444444444437
     {
       player.anims.play('turn', true);
       player.setVelocityY(-250);
+      console.log(`jumpStart:${player.x}`); //DEV // 14785 > 14975
     }
     else if (cursors.right.isDown) // slam
     {
@@ -106,17 +109,31 @@ var SceneOne = new Phaser.Class({
     if (beat_counter==30) {
       beatText.setText('O');
       beat_counter = 0;
-      console.log(player.x - player_last_x); // this is a temporary visual for dev
+      console.log(`dX:${player.x - player_last_x}`); // this is a temporary visual for dev
+      //`Fifteen is ${five + ten} and not ${2 * five + ten}.`
       player_last_x = player.x;
     } else {
       beatText.setText('X');
+    }
+    // dev testing
+    if(player.y < player_max_y && player.x > 450) {
+      player_max_y = player.y;
+      console.log(`maxY:${player.y},currX:${player.x}`);
     }
   }
 });
 
 function moveUsed (move)
 {
-    // if move used matches what we wanted here, yay!
-    // if we didnt want anything here, move goes off but no benefit
-    // add to score for correctly timed moves (+- 5 frames)
+  // if move used matches what we wanted here, yay!
+  // if we didnt want anything here, move goes off but no benefit
+  // add to score for correctly timed moves (+- 5 frames)
+}
+
+function recovery(dunno)
+{
+  // is the player out of timing / stuck on a wall?
+  // if so, warp them forward to intended position
+  // use player.alpha to flash in and out for injury notif that is seperate from actual animation cycles.
+  // subtract life?
 }
