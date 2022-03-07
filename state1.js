@@ -41,6 +41,8 @@ var SceneOne = new Phaser.Class({
     for (let i = 0; i<240;i++) {
       platforms.create(75+i*150,350,"ground");
     }
+    platforms.create(1615,325,"ground");
+    platforms.create(3190,275,"ground");
     //platforms.create(x,y,"tag");//.setScale(2).refreshBody(); // setScale doubles size, need .refreshBody because we've changed a static body
     console.log("map scene1 made");
     player = this.physics.add.sprite(150,250,"king");
@@ -62,6 +64,16 @@ var SceneOne = new Phaser.Class({
       frames: this.anims.generateFrameNumbers("king", {start:5, end:8}),
       frameRate: 10,
       repeat: -1
+    });
+    this.anims.create({
+      key: 'slam',
+      frames: [{key:"king", frame: 10}],
+      frameRate: 20
+    });
+    this.anims.create({
+      key: 'down',
+      frames: [{key:"king", frame: 11}],
+      frameRate: 20
     });
     player.body.setGravityY(200);
     this.physics.add.collider(player, platforms);
@@ -96,13 +108,13 @@ var SceneOne = new Phaser.Class({
     }
     else if (cursors.right.isDown) // slam
     {
-      player.anims.play('left', false);
-      this.add.image(player.x,player.y,"temp"); // using dead square just to indicate where slam used
+      player.anims.play('slam', false);
+      //this.add.image(player.x,player.y,"slam"); 
     }
     else if (cursors.down.isDown) // drop
     {
-      player.anims.play('left', false);
-      this.add.image(player.x,player.y,"temp"); // using dead square just to indicate where drop used
+      player.anims.play('down', false);
+      //this.add.image(player.x,player.y,"down"); 
     }
     // counting beats
     beat_counter += 1;
@@ -119,6 +131,10 @@ var SceneOne = new Phaser.Class({
     if(player.y < player_max_y && player.x > 450) {
       player_max_y = player.y;
       console.log(`maxY:${player.y},currX:${player.x}`);
+    }
+    if(player.x > 5000) {
+      player.x = 500;
+      console.log("loop at 5k reached");
     }
   }
 });
