@@ -41,8 +41,8 @@ var SceneOne = new Phaser.Class({
     for (let i = 0; i<240;i++) {
       platforms.create(75+i*150,350,"ground");
     }
-    platforms.create(1615,325,"ground");
-    platforms.create(3190,275,"ground");
+    platforms.create(1690,330,"ground"); // test short hop
+    platforms.create(3265,285,"ground"); // test long hop
     //platforms.create(x,y,"tag");//.setScale(2).refreshBody(); // setScale doubles size, need .refreshBody because we've changed a static body
     console.log("map scene1 made");
     player = this.physics.add.sprite(150,250,"king");
@@ -85,12 +85,6 @@ var SceneOne = new Phaser.Class({
     player_last_x = player.x;
   },
   update:function(){
-    // if (cursors.left.isDown)
-    // {
-    //   //player.setVelocityX(-160);
-    //   player.anims.play('left', true);
-    // }
-    
     player.setVelocityX(hero_move);
     player.anims.play('right', true);
     
