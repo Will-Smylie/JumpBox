@@ -22,6 +22,8 @@ var SceneOne = new Phaser.Class({
   preload:function(){
     this.load.image("bg","bg.png");//1000x600
     this.load.image("ground","ground.png"); //150x100
+    this.load.image("up","sig1_up.png"); //16x16
+    this.load.image("up2","sig2_bigup.png"); //16x27
     //this.load.image("chest","chest.png");//16x13
     //this.load.image("ladder","ladder.png");//16x48
     this.load.spritesheet("king", "dude.png", { frameWidth: 17, frameHeight: 23 });
@@ -35,18 +37,29 @@ var SceneOne = new Phaser.Class({
     const cam = this.cameras.add(0, 0, 800, 600);
     // use . setOrigin after .image >> .setOrigin(0,0)
     // phaser builds in order, so top image last
+
+    this.add.image(1000,200,"up");
+    this.add.image(1500,200,"up");
+    this.add.image(2000,200,"up");
+    this.add.image(2500,200,"up");
+    this.add.image(1000,100,"up2");
+    this.add.image(1500,100,"up2");
+    this.add.image(2000,100,"up2");
+    this.add.image(2500,100,"up2");
+
     console.log("hi im state1");
     this.physics.world.setFPS(fps);
     platforms = this.physics.add.staticGroup();
     for (let i = 0; i<240;i++) {
       platforms.create(75+i*150,350,"ground");
     }
-    platforms.create(1690,330,"ground"); // test short hop
-    platforms.create(3265,285,"ground"); // test long hop
+    // platforms.create(1690,330,"ground"); // test short hop
+    // platforms.create(3265,285,"ground"); // test long hop
+    buildStage1();
     //platforms.create(x,y,"tag");//.setScale(2).refreshBody(); // setScale doubles size, need .refreshBody because we've changed a static body
     console.log("map scene1 made");
     player = this.physics.add.sprite(150,250,"king");
-    player.setBounce(0.2);
+    player.setBounce(0);
     player.setCollideWorldBounds(false);
     this.anims.create({
       key: 'right',
@@ -92,13 +105,13 @@ var SceneOne = new Phaser.Class({
     {
       player.anims.play('turn', true);
       player.setVelocityY(-150);
-      console.log(`jumpStart:${player.x}`); //DEV // 4550 >  4665
+      // console.log(`jumpStart:${player.x}`); //DEV // 4550 >  4665
     }
     else if (cursors.space.isDown && player.body.touching.down) // tall hop, results in 288.5-212.44444444444437
     {
       player.anims.play('turn', true);
       player.setVelocityY(-250);
-      console.log(`jumpStart:${player.x}`); //DEV // 14785 > 14975
+      // console.log(`jumpStart:${player.x}`); //DEV // 14785 > 14975
     }
     else if (cursors.right.isDown) // slam
     {
@@ -116,20 +129,21 @@ var SceneOne = new Phaser.Class({
       beatText.setText('O');
       beat_counter = 0;
       console.log(`dX:${player.x - player_last_x}`); // this is a temporary visual for dev
+      console.log(`X:${player.x}`); // this is a temporary visual for dev
       //`Fifteen is ${five + ten} and not ${2 * five + ten}.`
       player_last_x = player.x;
     } else {
       beatText.setText('X');
     }
     // dev testing
-    if(player.y < player_max_y && player.x > 450) {
-      player_max_y = player.y;
-      console.log(`maxY:${player.y},currX:${player.x}`);
-    }
-    if(player.x > 5000) {
-      player.x = 500;
-      console.log("loop at 5k reached");
-    }
+    // if(player.y < player_max_y && player.x > 450) {
+    //   player_max_y = player.y;
+    //   console.log(`maxY:${player.y},currX:${player.x}`);
+    // }
+    // if(player.x > 5000) {
+    //   player.x = 500;
+    //   console.log("loop at 5k reached");
+    // }
   }
 });
 
@@ -146,4 +160,67 @@ function recovery(dunno)
   // if so, warp them forward to intended position
   // use player.alpha to flash in and out for injury notif that is seperate from actual animation cycles.
   // subtract life?
+}
+
+function buildStage1()
+{
+  // loading for stage 1, 3/21/22
+  platforms.create(450,330,"ground");
+  platforms.create(750,285,"ground");
+  platforms.create(1050,330,"ground");
+  platforms.create(1200,310,"ground");
+  platforms.create(1350,290,"ground");
+  platforms.create(1500,270,"ground");
+  platforms.create(1800,285,"ground");
+  platforms.create(2100,220,"ground");
+  platforms.create(2550,330,"ground");
+  platforms.create(2850,330,"ground");
+  platforms.create(3000,265,"ground");
+  platforms.create(3300,330,"ground");
+  platforms.create(3450,330,"ground");
+  platforms.create(3600,310,"ground");
+  platforms.create(3750,290,"ground");
+  platforms.create(3900,270,"ground");
+  platforms.create(4050,250,"ground");
+  platforms.create(4350,285,"ground");
+  platforms.create(4650,220,"ground");
+  platforms.create(4950,155,"ground");
+  platforms.create(5550,330,"ground");
+  platforms.create(5700,330,"ground");
+  platforms.create(6300,330,"ground");
+  platforms.create(7200,285,"ground");
+  platforms.create(7500,265,"ground");
+  platforms.create(8400,330,"ground");
+  platforms.create(8550,265,"ground");
+  platforms.create(8700,330,"ground");
+  platforms.create(9600,330,"ground");
+  platforms.create(9900,330,"ground");
+  platforms.create(10050,310,"ground");
+  platforms.create(10200,245,"ground");
+  platforms.create(10500,330,"ground");
+  platforms.create(10650,285,"ground");
+  platforms.create(10800,265,"ground");
+  platforms.create(11100,330,"ground");
+  platforms.create(11250,310,"ground");
+  platforms.create(11400,290,"ground");
+  platforms.create(11550,270,"ground");
+  platforms.create(11700,250,"ground");
+  platforms.create(11850,230,"ground");
+  platforms.create(12000,210,"ground");
+  platforms.create(12900,285,"ground");
+  platforms.create(13800,285,"ground");
+  platforms.create(14700,285,"ground");
+  platforms.create(15000,330,"ground");
+  platforms.create(15150,310,"ground");
+  platforms.create(15300,245,"ground");
+  platforms.create(15900,330,"ground");
+  platforms.create(16200,330,"ground");
+  platforms.create(16500,285,"ground");
+  platforms.create(16800,330,"ground");
+  platforms.create(16950,310,"ground");
+  platforms.create(17100,290,"ground");
+  platforms.create(17250,270,"ground");
+  platforms.create(17400,250,"ground");
+  platforms.create(17700,285,"ground");
+  
 }
