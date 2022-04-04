@@ -10,24 +10,24 @@ var TitleScreen = new Phaser.Class({
   preload:function(){
     this.load.image("demo_instruct","demo_instruct.png");//800x600
     this.load.image("dot","vol_slider_knob.png"); //20x20
-    this.load.audio("track1","walkingwithswagger.mp3")
+    //this.load.audio("track1","walkingwithswagger.mp3")
     // //this.load.image("chest","chest.png");//16x13
     // //this.load.image("ladder","ladder.png");//16x48
     // this.load.spritesheet("king", "dude.png", { frameWidth: 17, frameHeight: 23 });
   },
   create:function(){
     this.add.image(400,300,"demo_instruct"); //800x600
-    //var volKnob = this.add.sprite(600,324,"dot");
-    //volKnob.inputEnabled = true;
-    //volKnob.input.enableDrag(true);
-    //var bgTrack = this.sound.add("track1",{volume: globalVol});
+    var volKnob = this.add.sprite(600,324,"dot");
+    volKnob.inputEnabled = true;
+    volKnob.input.enableDrag(true);
+    var bgTrack = this.sound.add("track1",{volume: globalVol});
   },
   update:function(){
-  //  if (cursors.r.isDown)
-  //  {
-  //    console.log(this.scene.get('SceneOne'));
-  //    this.scene.start("SceneOne");
-  //  }
+    if (cursors.r.isDown)
+    {
+      console.log(this.scene.get('SceneOne'));
+      this.scene.start("SceneOne");
+    }
   }
 });
 
