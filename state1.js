@@ -5,6 +5,9 @@ var globalVol = 0.2;
 var text;
 var timedEvent;
 gameOver = false;
+var jumpSigns;
+var healthText;
+var spacebar;
 
 //assumed scene params, may want to move to config?
 var bpm = 120; // units: Beats Per Minute
@@ -26,14 +29,16 @@ var SceneOne = new Phaser.Class({
   preload:function(){
     this.load.image("bg","bg.png");//1000x600
     this.load.image("ground","ground.png"); //150x100
-    this.load.image("up","sig1_up.png"); //16x16
-    this.load.image("up2","sig2_bigup.png"); //16x27
     this.load.audio("track1","walkingwithswagger.mp3");
     this.load.image("dot","vol_slider_knob.png"); //20x20
     //this.load.image("chest","chest.png");//16x13
     //this.load.image("ladder","ladder.png");//16x48
-    this.load.spritesheet("king", "dude.png", { frameWidth: 17, frameHeight: 23 });
+    this.load.spritesheet("king", "player.png", { frameWidth: 48, frameHeight: 48 });
+    this.load.spritesheet("enemy", "enemy.png", { frameWidth: 48, frameHeight: 48 });
+    this.load.spritesheet("jumpSign", "sig2_bigup.png", {frameWidth: 16, frameHeight: 27});
+    this.load.spritesheet("boxSign", "punchSig.png", {frameWidth: 16, frameHeight: 27});
   },
+
   create:function(){
     for (let i = 0; i<36;i++) {
       this.add.image(500+1000*i,300,"bg"); //1000x600
@@ -42,11 +47,17 @@ var SceneOne = new Phaser.Class({
     //this.physics.startSystem(Phaser.Physics.ARCADE);
     //this.physics.arcade.checkCollision.down = false;
 
+    //keyObj.on('down', function(event) {  this.scene.restart() });
+
+    
+
     console.log('create');
     // 2:30 in seconds
     this.initialTime = 94;
-
     text = this.add.text(32, 32, 'Countdown: ' + formatTime(this.initialTime));
+
+    this.health = 3;
+    healthText = this.add.text(32, 48, 'Health: ' + this.health);
 
     // Each 1000 ms call onEvent
     timedEvent = this.time.addEvent({ delay: 1000, callback: onEvent, callbackScope: this, loop: true });
@@ -57,61 +68,10 @@ var SceneOne = new Phaser.Class({
     // use . setOrigin after .image >> .setOrigin(0,0)
     // phaser builds in order, so top image last
 
-    this.add.image(1200,200,"up");
-    this.add.image(1350,100,"up2");
-    this.add.image(1650,200,"up");
-    this.add.image(1950,200,"up");
-    this.add.image(2500,200,"up2");
-    this.add.image(3600,200,"up");
-    this.add.image(3750,200,"up");
-    this.add.image(3900,100,"up2");
-    this.add.image(4350,100,"up2");
-    this.add.image(4650,100,"up2");
-    this.add.image(5250,200,"up");
-    this.add.image(5400,200,"up");
-    this.add.image(5700,100,"up2");
-    this.add.image(6450,100,"up2");
-    this.add.image(7050,100,"up2");
-    this.add.image(7350,200,"up");
-    this.add.image(7500,200,"up");
-    this.add.image(7650,100,"up2");
-    this.add.image(7950,100,"up2");
-    this.add.image(8550,200,"up");
-    this.add.image(8700,200,"up");
-    this.add.image(8850,175,"up");
-    this.add.image(9000,150,"up");
-    this.add.image(10050,200,"up");
-    this.add.image(10650,100,"up2");
-    this.add.image(11250,200,"up");
-    this.add.image(11400,200,"up");
-    this.add.image(11550,100,"up2");
-    this.add.image(12450,200,"up2");
-    this.add.image(13350,200,"up");
-    this.add.image(13650,200,"up");
-    this.add.image(14250,100,"up2");
-    this.add.image(14550,200,"up");
-    this.add.image(14700,100,"up2");
-    this.add.image(15000,100,"up2");
-    this.add.image(15300,100,"up2");
-    this.add.image(15600,100,"up2");
-    this.add.image(15900,100,"up2");
-    this.add.image(17400,200,"up");
-    this.add.image(18000,100,"up2");
-    this.add.image(18300,100,"up2");
-    this.add.image(18600,100,"up2");
-    this.add.image(18900,100,"up2");
-    this.add.image(21000,100,"up2");
-    this.add.image(21600,100,"up2");
-    this.add.image(21900,200,"up");
-    this.add.image(22050,200,"up");
-    this.add.image(22800,100,"up2");
-    this.add.image(23250,200,"up");
-    this.add.image(23850,200,"up");
-    this.add.image(24000,200,"up");
-    this.add.image(25200,100,"up2");
-    this.add.image(25500,100,"up2");
-    this.add.image(25800,100,"up2");
-    this.add.image(26100,100,"up2");
+    
+    //this.physics.add.collider(jump, player);
+
+    
     this.add.text(26250, 150, 'Congrats you completed level 1!',{ fontSize: '32px', fill: '#FFF' });
 
     console.log("hi im state1");
@@ -122,7 +82,7 @@ var SceneOne = new Phaser.Class({
     }
     // platforms.create(1690,330,"ground"); // test short hop
     // platforms.create(3265,285,"ground"); // test long hop
-    buildStage1();
+    //buildStage1();
     //platforms.create(x,y,"tag");//.setScale(2).refreshBody(); // setScale doubles size, need .refreshBody because we've changed a static body
     console.log("map scene1 made");
     player = this.physics.add.sprite(150,250,"king");
@@ -130,31 +90,26 @@ var SceneOne = new Phaser.Class({
     player.setCollideWorldBounds(false);
     this.anims.create({
       key: 'right',
-      frames: this.anims.generateFrameNumbers("king", {start:0, end:3}),
+      frames: this.anims.generateFrameNumbers("king", {start:4, end:9}),
       frameRate: 10,
       repeat: -1
     });
     this.anims.create({
-      key: 'turn',
-      frames: [{key:"king", frame: 4}],
-      frameRate: 20
-    });
-    this.anims.create({
-      key: 'left',
-      frames: this.anims.generateFrameNumbers("king", {start:5, end:8}),
+      key: 'jump',
+      frames: this.anims.generateFrameNumbers("king", {start:1, end:1}),
       frameRate: 10,
-      repeat: -1
+      repeat: 5
     });
     this.anims.create({
-      key: 'slam',
-      frames: [{key:"king", frame: 10}],
-      frameRate: 20
+      key: 'punch',
+      frames: this.anims.generateFrameNumbers("king", {start:12, end:12}),
+      frameRate: 10,
+      repeat: 5
     });
-    this.anims.create({
-      key: 'down',
-      frames: [{key:"king", frame: 11}],
-      frameRate: 20
-    });
+
+    enemies = this.physics.add.staticGroup();
+    
+    
     player.body.setGravityY(200);
     this.physics.add.collider(player, platforms);
     cam.startFollow(target=player, roundPixels=false, lerpX=0.5, lerpY=0.5, offsetX=-280, offsetY=150);
@@ -165,8 +120,70 @@ var SceneOne = new Phaser.Class({
     
     player_last_x = player.x;
 
-    let bgTrack = this.sound.add("track1", .2);
+    bgTrack = this.sound.add("track1", .2);
     bgTrack.play();
+
+    spacebar = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
+
+    jumpSigns = this.physics.add.staticGroup();
+    boxSigns = this.physics.add.staticGroup();
+
+    //jump tutorial
+    jumpSigns.create(1200,275,"jumpSign");
+    this.add.text(1000, 150, 'TIME JUMPS WITH SYMBOL',{ fontSize: '32px', fill: '#FFF' });
+    jumpSigns.create(1950,275,"jumpSign");
+    platforms.create(2175,295,"ground");
+    platforms.create(2325,295,"ground");
+    platforms.create(2475,295,"ground");
+    platforms.create(2625,295,"ground");
+    jumpSigns.create(2550,220,"jumpSign");
+
+    //box tutorial
+    this.add.text(2800, 150, 'PRESS RIGHT ARROW TO BOX',{ fontSize: '32px', fill: '#FFF' });
+    boxSigns.create(3750,275,"boxSign");
+    this.add.text(3500, 150, 'TIME WITH THE SYMBOL TO DEFEAT ENEMIES',{ fontSize: '32px', fill: '#FFF' });
+    enemies.create(3800,275,"enemy");
+    boxSigns.create(4050,275,"boxSign");
+    enemies.create(4100,275,"enemy");
+    boxSigns.create(4350,275,"boxSign");
+    enemies.create(4400,275,"enemy");
+    //this.add.text(4800, 150, 'IF HEALTH HITS 0 OR PLATFORM IS HIT, LEVEL WILL RESTART',{ fontSize: '32px', fill: '#FFF' });
+
+    jumpSigns.create(4950,275,"jumpSign");
+    platforms.create(5175,295,"ground");
+    platforms.create(5325,295,"ground");
+    jumpSigns.create(5250,220,"jumpSign");
+    platforms.create(5475,240,"ground");
+    platforms.create(5625,240,"ground");
+    platforms.create(5775,240,"ground");
+    
+    boxSigns.create(5550,165,"boxSign");
+    enemies.create(5600,165,"enemy");
+    boxSigns.create(5700,165,"boxSign");
+    enemies.create(5750,165,"enemy");
+    jumpSigns.create(5850,165,"jumpSign");
+    platforms.create(6075,240,"ground");
+    platforms.create(6225,240,"ground");
+    platforms.create(6375,240,"ground");
+    boxSigns.create(6150,165,"boxSign");
+    enemies.create(6200,165,"enemy");
+    boxSigns.create(6300,165,"boxSign");
+    enemies.create(6350,165,"enemy");
+
+    this.physics.add.overlap(player, jumpSigns, jumpNow, null, this);
+
+    this.physics.add.overlap(player, enemies, punchChance, null, this);
+
+    
+
+    //jump.create(1000,275,"jumpSign");
+    //jump.create(1100,275,"jumpSign");
+
+
+    
+    //jump.setBounce(0);
+    //jump.setCollideWorldBounds(true);
+    //this.physics.add.collider(jump, platforms);
 
     //this.input.once('pointerdown', this.scene.restart());
   },
@@ -175,24 +192,34 @@ var SceneOne = new Phaser.Class({
     player.anims.play('right', true);
     
     //game.physics.arcade.collide(player, 'ground');
+    //var keyObj = this.input.keyboard.addKey('W');
+    //var isDown = keyObj.isDown;
+    //keyObj.on('down', function(event) { this.scene.restart() });
+
+    if (Phaser.Input.Keyboard.JustDown(spacebar))
+    {
+        this.scene.restart();
+        bgTrack.stop();
+    }
 
     
 
-    if (cursors.up.isDown && player.body.touching.down) // short hop, results in 288.5-261.611111111111
-    {
-      player.anims.play('turn', true);
-      player.setVelocityY(-150);
-      // console.log(`jumpStart:${player.x}`); //DEV // 4550 >  4665
-    }
-    else if (cursors.space.isDown && player.body.touching.down) // tall hop, results in 288.5-212.44444444444437
-    {
-      player.anims.play('turn', true);
-      player.setVelocityY(-250);
+
+    //if (cursors.up.isDown && player.body.touching.down) // short hop, results in 288.5-261.611111111111
+    //{
+    //  player.anims.play('turn', true);
+    //  player.setVelocityY(-250);
+    //  console.log(`jumpStart:${player.x}`); //DEV // 4550 >  4665
+    //}
+    //if (cursors.space.isDown && player.body.touching.down) // tall hop, results in 288.5-212.44444444444437
+    //{
+      //player.anims.play('turn', true);
+      //player.setVelocityY(-150);
       // console.log(`jumpStart:${player.x}`); //DEV // 14785 > 14975
-    }
+    //}
     else if (cursors.right.isDown) // slam
     {
-      player.anims.play('slam', false);
+      player.anims.play('punch', false);
       //this.add.image(player.x,player.y,"slam"); 
     }
     else if (cursors.down.isDown) // drop
@@ -224,27 +251,41 @@ var SceneOne = new Phaser.Class({
   }
 });
 
-function moveUsed (move)
+
+
+function punchChance(player, enemy)
 {
-  // if move used matches what we wanted here, yay!
-  // if we didnt want anything here, move goes off but no benefit
-  // add to score for correctly timed moves (+- 5 frames)
+  if (cursors.right.isDown)
+    {
+      player.anims.play('punch', false);
+      enemy.disableBody(true, true);
+    }
+  else
+    {
+      if (this.health > 0)
+      {
+        this.health = this.health - 1
+      }
+    }
 }
 
-function recovery(dunno)
+
+
+function jumpNow()
 {
-  // is the player out of timing / stuck on a wall?
-  // if so, warp them forward to intended position
-  // use player.alpha to flash in and out for injury notif that is seperate from actual animation cycles.
-  // subtract life?
+  if (cursors.up.isDown && player.body.touching.down) // short hop, results in 288.5-261.611111111111
+    {
+      player.anims.play('right', true);
+      player.setVelocityY(-250);
+      console.log(`jumpStart:${player.x}`); //DEV // 4550 >  4665
+    }
 }
 
 function buildStage1()
 {
   // loading for stage 1, 3/21/22
 
-  platforms.create(1350,330,"ground");
-  platforms.create(1650,295,"ground");
+  platforms.create(1500,295,"ground");
   platforms.create(1950,330,"ground");
   platforms.create(2100,310,"ground");
   platforms.create(2700,295,"ground");
@@ -278,8 +319,7 @@ function buildStage1()
   platforms.create(12750,295,"ground");
   platforms.create(13500,330,"ground");
   platforms.create(13800,330,"ground");
-  platforms.create(14550,295,"ground");
-  platforms.create(14700,275,"ground");
+  platforms.create(14700,295,"ground");
   platforms.create(15000,255,"ground");
   platforms.create(15300,255,"ground");
   platforms.create(15600,255,"ground");
@@ -351,7 +391,7 @@ function onEvent2()
         loop: false,
         callback: () => {
             this.scene.start("Lose", { 
-                "message": "Game Over!\nPress R to restart!"
+                "message": "Game Over!\nPress SPACEBAR to restart!"
             });
           }
       })

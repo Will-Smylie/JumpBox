@@ -1,3 +1,4 @@
+var spacebar;
 var Lose = new Phaser.Class({
     Extends: Phaser.Scene,
     initialize: function() {
@@ -8,6 +9,8 @@ var Lose = new Phaser.Class({
     },
     preload: function() {},
     create: function() {
+        spacebar = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
+
         var text = this.add.text(
             400, 
             360, 
@@ -19,5 +22,11 @@ var Lose = new Phaser.Class({
             }
         ).setOrigin(0.5);
     },
-    update: function() {}
+    update: function() {
+        if (Phaser.Input.Keyboard.JustDown(spacebar))
+        {
+            
+            this.scene.start('SceneOne');
+        }
+    }
 });
