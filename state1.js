@@ -169,6 +169,102 @@ var SceneOne = new Phaser.Class({
     enemies.create(6200,165,"enemy");
     boxSigns.create(6300,165,"boxSign");
     enemies.create(6350,165,"enemy");
+    jumpSigns.create(6450,165,"jumpSign");
+    platforms.create(6675,240,"ground");
+    platforms.create(6825,240,"ground");
+    platforms.create(6975,240,"ground");
+    boxSigns.create(6750,165,"boxSign");
+    enemies.create(6800,165,"enemy");
+    boxSigns.create(6900,165,"boxSign");
+    enemies.create(6950,165,"enemy");
+
+    boxSigns.create(7350,275,"boxSign");
+    enemies.create(7400,275,"enemy");
+    boxSigns.create(7425,275,"boxSign");
+    enemies.create(7475,275,"enemy");
+
+    boxSigns.create(7650,275,"boxSign");
+    enemies.create(7700,275,"enemy");
+    boxSigns.create(7725,275,"boxSign");
+    enemies.create(7775,275,"enemy");
+
+    boxSigns.create(7950,275,"boxSign");
+    enemies.create(8000,275,"enemy");
+    boxSigns.create(8025,275,"boxSign");
+    enemies.create(8075,275,"enemy");
+
+    jumpSigns.create(8250,275,"jumpSign");
+    platforms.create(8475,295,"ground");
+    platforms.create(8625,295,"ground");
+    jumpSigns.create(8550,220,"jumpSign");
+    platforms.create(8775,240,"ground");
+    platforms.create(8925,240,"ground");
+    jumpSigns.create(8850,165,"jumpSign");
+    platforms.create(9075,185,"ground");
+    platforms.create(9225,185,"ground");
+
+    jumpSigns.create(9150,110,"jumpSign");
+    platforms.create(9525,185,"ground");
+    platforms.create(9675,185,"ground");
+    boxSigns.create(9450,110,"boxSign");
+    enemies.create(9500,110,"enemy");
+    jumpSigns.create(9750,110,"jumpSign");
+
+    platforms.create(9975,185,"ground");
+    boxSigns.create(10050,110,"boxSign");
+    enemies.create(10100,110,"enemy");
+    platforms.create(10125,185,"ground");
+    jumpSigns.create(10200,110,"jumpSign");
+
+    platforms.create(10475,240,"ground");
+    boxSigns.create(10550,165,"boxSign");
+    enemies.create(10600,165,"enemy");
+    platforms.create(10625,240,"ground");
+
+    platforms.create(10925,295,"ground");
+    platforms.create(11075,295,"ground");
+    boxSigns.create(11000,220,"boxSign");
+    enemies.create(11050,220,"enemy");
+
+    boxSigns.create(11300,275,"boxSign");
+    enemies.create(11350,275,"enemy");
+    boxSigns.create(11450,275,"boxSign");
+    enemies.create(11500,275,"enemy");
+
+    jumpSigns.create(11700,275,"jumpSign");
+    platforms.create(11925,295,"ground");
+    jumpSigns.create(12000,220,"jumpSign");
+    platforms.create(12225,255,"ground");
+    platforms.create(12525,295,"ground");
+    jumpSigns.create(12600,220,"jumpSign");
+    platforms.create(12825,255,"ground");
+    platforms.create(13125,295,"ground");
+    jumpSigns.create(13200,220,"jumpSign");
+    platforms.create(13425,255,"ground");
+    jumpSigns.create(13500,180,"jumpSign");
+    platforms.create(13725,215,"ground");
+    jumpSigns.create(13800,140,"jumpSign");
+    platforms.create(14025,215,"ground");
+    platforms.create(14175,215,"ground");
+    platforms.create(14325,215,"ground");
+
+    platforms.create(14475,215,"ground");
+    platforms.create(14625,215,"ground");
+    platforms.create(14775,215,"ground");
+
+    boxSigns.create(14250,140,"boxSign");
+    enemies.create(14300,140,"enemy");
+    boxSigns.create(14325,140,"boxSign");
+    enemies.create(14375,140,"enemy");
+    boxSigns.create(14400,140,"boxSign");
+    enemies.create(14450,140,"enemy");
+    boxSigns.create(14475,140,"boxSign");
+    enemies.create(14525,140,"enemy");
+
+
+
+
+
 
     this.physics.add.overlap(player, jumpSigns, jumpNow, null, this);
 
