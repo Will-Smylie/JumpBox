@@ -9,7 +9,7 @@ var config = {
           gravity: { y: 300 }
       }
   },
-  scene: [ SceneOne, Lose ]
+  scene: [ TitleScreen, SceneOne, Lose ]
 };
 
 var game = new Phaser.Game(config);

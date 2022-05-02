@@ -26,7 +26,7 @@ var TitleScreen = new Phaser.Class({
     //volKnob.inputEnabled = true;
     //volKnob.input.enableDrag(true);
     //var bgTrack = this.sound.add("track1",{volume: globalVol});
-    this.add.text(20, 150, 'Press up-arrow to jump\nPress right-arrow to break\nPress down-arrow to smash\nPress spacebar to play/restart\nduring level\n\nObjective: Try to complete the level before the timer\nfinishes counting down!',{ fontSize: '20px', fill: '#FFF' });
+    this.add.text(20, 150, 'Press up-arrow to JUMP\nPress right-arrow to BOX\nPress spacebar to play/restart\nduring level\n\nObjective: Try to complete the level before the timer\nfinishes counting down!',{ fontSize: '20px', fill: '#FFF' });
     spacebar = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
   },
   update:function(){
