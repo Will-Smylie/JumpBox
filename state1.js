@@ -116,9 +116,9 @@ var SceneOne = new Phaser.Class({
     //cam.startFollow(player); // most basic version of camera
     cursors = this.input.keyboard.createCursorKeys();
     //scoreText = this.add.text(16, 16, 'score: 0', { fontSize: '32px', fill: '#FFF' });
-    beatText = this.add.text(16, 48, 'X', { fontSize: '32px', fill: '#FFF' });
+    //beatText = this.add.text(16, 48, 'X', { fontSize: '32px', fill: '#FFF' });
     
-    player_last_x = player.x;
+    
 
     bgTrack = this.sound.add("track1", .2);
     bgTrack.play();
@@ -269,6 +269,7 @@ var SceneOne = new Phaser.Class({
     this.physics.add.overlap(player, jumpSigns, jumpNow, null, this);
 
     this.physics.add.overlap(player, enemies, punchChance, null, this);
+    this.physics.add.overlap(player, platforms, jumpFail, null, this);
 
     
 
@@ -311,14 +312,14 @@ var SceneOne = new Phaser.Class({
     // counting beats
     beat_counter += 1;
     if (beat_counter==30) {
-      beatText.setText('O');
       beat_counter = 0;
-      console.log(`dX:${player.x - player_last_x}`); // this is a temporary visual for dev
-      console.log(`X:${player.x}`); // this is a temporary visual for dev
-      //`Fifteen is ${five + ten} and not ${2 * five + ten}.`
+      console.log(`dX:${player.x - player_last_x}`); 
+      console.log(`X:${player.x}`); 
+      if (player.x - player_last_x == 0){
+        this.scene.restart();
+        bgTrack.stop();
+      }
       player_last_x = player.x;
-    } else {
-      beatText.setText('X');
     }
   }
 });
@@ -341,6 +342,11 @@ function punchChance(player, enemy)
     }
 }
 
+function jumpFail(player, ground)
+{
+  print("touch");
+}
+
 
 
 function jumpNow()
@@ -349,90 +355,11 @@ function jumpNow()
     {
       player.anims.play('right', true);
       player.setVelocityY(-250);
-      console.log(`jumpStart:${player.x}`); //DEV // 4550 >  4665
+      console.log("jump");
     }
 }
 
-function buildStage1()
-{
-  // loading for stage 1, 3/21/22
 
-  platforms.create(1500,295,"ground");
-  platforms.create(1950,330,"ground");
-  platforms.create(2100,310,"ground");
-  platforms.create(2700,295,"ground");
-  platforms.create(3150,200,"ground");
-  platforms.create(3450,200,"ground");
-  platforms.create(3750,330,"ground");
-  platforms.create(3900,310,"ground");
-  platforms.create(4150,255,"ground");
-  platforms.create(4650,295,"ground");
-  platforms.create(4900,240,"ground");
-  platforms.create(5400,330,"ground");
-  platforms.create(5550,310,"ground");
-  platforms.create(6000,295,"ground");
-  platforms.create(6750,310,"ground");
-  platforms.create(7350,295,"ground");
-  platforms.create(7500,275,"ground");
-  platforms.create(7650,255,"ground");
-  platforms.create(7950,255,"ground");
-  platforms.create(8250,255,"ground");
-  platforms.create(8700,330,"ground");
-  platforms.create(8850,310,"ground");
-  platforms.create(9000,290,"ground");
-  platforms.create(9150,270,"ground");
-  platforms.create(9450,200,"ground");
-  platforms.create(9750,200,"ground");
-  platforms.create(10200,330,"ground");
-  platforms.create(10950,295,"ground");
-  platforms.create(11400,330,"ground");
-  platforms.create(11550,310,"ground");
-  platforms.create(11850,260,"ground");
-  platforms.create(12750,295,"ground");
-  platforms.create(13500,330,"ground");
-  platforms.create(13800,330,"ground");
-  platforms.create(14700,295,"ground");
-  platforms.create(15000,255,"ground");
-  platforms.create(15300,255,"ground");
-  platforms.create(15600,255,"ground");
-  platforms.create(15900,255,"ground");
-  platforms.create(16200,255,"ground");
-  platforms.create(16800,200,"ground");
-  platforms.create(17100,200,"ground");
-  platforms.create(17550,330,"ground");
-  platforms.create(17700,330,"ground");
-  platforms.create(17850,330,"ground");
-  platforms.create(18000,330,"ground");
-  platforms.create(18300,275,"ground");
-  platforms.create(18600,275,"ground");
-  platforms.create(18900,275,"ground");
-  platforms.create(19200,275,"ground");
-  platforms.create(19500,200,"ground");
-  platforms.create(21000,295,"ground");
-  platforms.create(21150,275,"ground");
-  platforms.create(22050,330,"ground");
-  platforms.create(22200,310,"ground");
-  platforms.create(22500,200,"ground");
-  platforms.create(23100,200,"ground");
-  platforms.create(23400,330,"ground");
-  platforms.create(23550,330,"ground");
-  platforms.create(23700,330,"ground");
-  platforms.create(23850,330,"ground");
-  platforms.create(24000,310,"ground");
-  platforms.create(24150,290,"ground");
-  platforms.create(24300,290,"ground");
-  platforms.create(24450,290,"ground");
-  platforms.create(24600,290,"ground");
-  platforms.create(25500,295,"ground");
-  platforms.create(25800,295,"ground");
-  platforms.create(26100,295,"ground");
-  platforms.create(26400,295,"ground");
-
-
-  //platforms.create(12000,330,"ground");
-  
-  
-}
 
 function formatTime(seconds){
   // Minutes
