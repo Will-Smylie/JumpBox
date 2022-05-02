@@ -202,21 +202,6 @@ var SceneOne = new Phaser.Class({
         bgTrack.stop();
     }
 
-    
-
-
-    //if (cursors.up.isDown && player.body.touching.down) // short hop, results in 288.5-261.611111111111
-    //{
-    //  player.anims.play('turn', true);
-    //  player.setVelocityY(-250);
-    //  console.log(`jumpStart:${player.x}`); //DEV // 4550 >  4665
-    //}
-    //if (cursors.space.isDown && player.body.touching.down) // tall hop, results in 288.5-212.44444444444437
-    //{
-      //player.anims.play('turn', true);
-      //player.setVelocityY(-150);
-      // console.log(`jumpStart:${player.x}`); //DEV // 14785 > 14975
-    //}
     else if (cursors.right.isDown) // slam
     {
       player.anims.play('punch', false);
@@ -239,15 +224,6 @@ var SceneOne = new Phaser.Class({
     } else {
       beatText.setText('X');
     }
-    // dev testing
-    // if(player.y < player_max_y && player.x > 450) {
-    //   player_max_y = player.y;
-    //   console.log(`maxY:${player.y},currX:${player.x}`);
-    // }
-    // if(player.x > 5000) {
-    //   player.x = 500;
-    //   console.log("loop at 5k reached");
-    // }
   }
 });
 
