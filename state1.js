@@ -30,6 +30,8 @@ var SceneOne = new Phaser.Class({
     this.load.image("bg","bg.png");//1000x600
     this.load.image("ground","ground.png"); //150x100
     this.load.audio("track1","walkingwithswagger.mp3");
+    this.load.audio("jumpSound","jumpSound.wav");
+    this.load.audio("punchSound","snareSound.wav");
     this.load.image("dot","vol_slider_knob.png"); //20x20
     //this.load.image("chest","chest.png");//16x13
     //this.load.image("ladder","ladder.png");//16x48
@@ -41,7 +43,7 @@ var SceneOne = new Phaser.Class({
 
   create:function(){
     for (let i = 0; i<36;i++) {
-      this.add.image(500+1000*i,300,"bg"); //1000x600
+      this.add.image(500+1000*i,300,"bg").setScale(2,2); //1000x600
     } // all phaser images are positioned by their center
     //camera 
     //this.physics.startSystem(Phaser.Physics.ARCADE);
@@ -68,6 +70,8 @@ var SceneOne = new Phaser.Class({
     // use . setOrigin after .image >> .setOrigin(0,0)
     // phaser builds in order, so top image last
 
+    text.setScrollFactor(0,0);
+    healthText.setScrollFactor(0.0);
     
     //this.physics.add.collider(jump, player);
 
@@ -121,6 +125,8 @@ var SceneOne = new Phaser.Class({
     
 
     bgTrack = this.sound.add("track1", .2);
+    jumpTrack = this.sound.add("jumpSound");
+    punchTrack = this.sound.add("punchSound");
     bgTrack.play();
 
     spacebar = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
@@ -266,9 +272,9 @@ var SceneOne = new Phaser.Class({
 
 
 
-    this.physics.add.overlap(player, jumpSigns, jumpNow, null, this);
-
-    this.physics.add.overlap(player, enemies, punchChance, null, this);
+    //this.physics.add.overlap(player, jumpSigns, jumpNow, null, this);
+    //this.physics.add.overlap(player, boxSigns, punchNow, null, this);
+    //this.physics.add.overlap(player, enemies, punchChance, null, this);
     this.physics.add.overlap(player, platforms, jumpFail, null, this);
 
     
@@ -302,7 +308,8 @@ var SceneOne = new Phaser.Class({
     else if (cursors.right.isDown) // slam
     {
       player.anims.play('punch', false);
-      //this.add.image(player.x,player.y,"slam"); 
+      punchTrack.play();
+      
     }
     else if (cursors.down.isDown) // drop
     {
@@ -321,6 +328,10 @@ var SceneOne = new Phaser.Class({
       }
       player_last_x = player.x;
     }
+
+    this.physics.add.overlap(player, enemies, punchChance, null, this);
+    this.physics.add.overlap(player, jumpSigns, jumpNow, null, this);
+    this.physics.add.overlap(player, boxSigns, punchNow, null, this);
   }
 });
 
@@ -347,7 +358,10 @@ function jumpFail(player, ground)
   print("touch");
 }
 
-
+function punchNow()
+{
+  player.anims.play('punch', false);
+}
 
 function jumpNow()
 {
@@ -355,6 +369,7 @@ function jumpNow()
     {
       player.anims.play('right', true);
       player.setVelocityY(-250);
+      jumpTrack.play();
       console.log("jump");
     }
 }
